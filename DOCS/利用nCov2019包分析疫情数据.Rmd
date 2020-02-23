@@ -1,0 +1,106 @@
+---
+title: "利用nCov2019包分析疫情数据"
+author: "Hope"
+date: "2020/2/19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+  本教程聚焦于如何使用南方医科大学余光创老师写的nCov2019包来对疫情数据进行获取、分析与可视化。更详细的资料可参考<https://github.com/GuangchuangYu/nCov2019>。
+
+## 包的安装
+  目前包没有上CRAN，只能够在GitHub上直接下载使用。安装方式如下：
+```{r,eval=FALSE}
+remotes::install_github("GuangchuangYu/nCov2019")
+```
+
+## 包的加载
+```{r}
+library(nCov2019)
+```
+
+## 当日数据获取（get_nCov2019）
+  数据获取仅仅需要一行代码：
+```{r}
+x <- get_nCov2019()
+```
+  现在，数据已经存储在x变量中。我们不妨看一下x是什么数据结构：
+```{r}
+class(x)
+names(x)
+```
+  x是一个“nCov2019”类（应该是作者自己起的类名称），一共包含13个部分。我们观察一下数据更新的时间：
+```{r}
+x$lastUpdateTime
+```
+  其实作者精妙设计下，直接对x进行观察即可：
+```{r}
+x #或者 time(x)
+```
+  如果想看数据的来源，可以键入：
+```{r,eval=FALSE}
+open(x)
+```
+  可以发现该数据来源于腾讯新闻的疫情地图。
+  如果需要获得全国各个省份的数据，可以直接加中括号：
+```{r}
+x[]
+```
+  如果需要看其中一个省份，可以在中括号中进行标注（比如我们要看湖北省的情况）：
+```{r}
+x['湖北']
+```
+  
+## 历史数据获取（load_nCov2019）
+  上面的方法一般是获得最新的数据，如果想要获得历史数据，需要使用`load_nCov2019`函数。使用方法极其简便：
+```{r}
+y <- load_nCov2019()
+y  #显示历史数据最终更新时间
+```
+  
+  这个数据来源于【新一线城市研究所×8点健闻】，详见[各省市的疫情历史数据来了！](https://mp.weixin.qq.com/s/lrQWGKj-mReWrxfi_4Sw9A)。用法与之前类似：
+```{r}
+y[] -> all_province
+head(all_province)
+
+y['湖北'] -> hubei
+head(hubei)
+```
+  
+## 地图可视化
+  在进行可视化之前，首先要加载地图数据，这也由老师直接提供了，获取方法如下：
+```{r,eval=FALSE}
+remotes::install_github("GuangchuangYu/chinamap")
+```
+  安装后，我们来加载数据：
+```{r}
+require(chinamap)
+cn = get_map_china()
+```
+  现在，中国地图的信息就在cn变量里面。
+  目前来说，地图可视化只支持到每天，也就是只能对单一日的疫情数据进行可视化。比如要对今天的数据进行可视化：
+```{r}
+plot(x, region='china', chinamap=cn)
+```
+  
+  其中，palette参数可以改变颜色，continuous_scale可以设置变量是离散还是连续的。例子如下：
+```{r}
+plot(x, region='china', chinamap=cn,
+    continuous_scale=FALSE,
+    palette='Blues')
+```
+  
+  如果想要画历史数据，则需要指定日期（比如我们想看2020年2月1号的数据）：
+```{r}
+plot(y, region='china',
+     chinamap=cn, date='2020-02-01')
+```
+   
+   事实上，只要有底图数据，可视化还能够细化到市级。具体教程可在[一次搞定所有的疫情地图](https://mp.weixin.qq.com/s/iWyOvOoLDl2q9VCUEDY52A) 找到。
+
+
+
+
