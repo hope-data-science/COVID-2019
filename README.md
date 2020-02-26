@@ -9,6 +9,7 @@ Data Source:
 
 - <https://github.com/canghailan/Wuhan-2019-nCoV>
 - <https://github.com/BlankerL/DXY-COVID-19-Data>
+- <https://systems.jhu.edu/research/public-health/ncov/>
 
 Method Source: <https://github.com/GuangchuangYu/nCov2019>
 
