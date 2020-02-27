@@ -11,7 +11,9 @@ Data Source:
 - <https://github.com/BlankerL/DXY-COVID-19-Data>
 - <https://systems.jhu.edu/research/public-health/ncov/>
 
-Method Source: <https://github.com/GuangchuangYu/nCov2019>
+Method Source: 
+- <https://github.com/GuangchuangYu/nCov2019>
+- <https://github.com/pzhaonet/ncovr>
 
 Literature Source: <http://stm.las.ac.cn/STMonitor/qbwnew/openhome.htm?serverId=172>
 
